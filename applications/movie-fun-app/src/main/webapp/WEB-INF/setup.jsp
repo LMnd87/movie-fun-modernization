@@ -67,7 +67,7 @@
       <td><b>Director</b></td>
       <td><b>Genre</b></td>
     </tr>
-    <c:forEach items="${requestScope.movies}" var="movie">
+    <c:forEach items="${requestScope.moviesList}" var="movie">
       <tr>
         <td>${ movie.title }</td>
         <td>${ movie.director }</td>
@@ -84,7 +84,7 @@
             <td><b>Year</b></td>
         </tr>
 
-        <c:forEach items="${requestScope.albums}" var="album">
+        <c:forEach items="${requestScope.albumsList}" var="album">
             <tr>
                 <td> ${album.title} </td>
                 <td> ${album.artist} </td>

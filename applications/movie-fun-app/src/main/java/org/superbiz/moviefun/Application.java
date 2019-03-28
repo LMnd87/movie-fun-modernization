@@ -8,9 +8,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 import org.superbiz.moviefun.blobstore.BlobStore;
 import org.superbiz.moviefun.blobstore.S3Store;
-import org.superbiz.moviefun.movies.MovieServlet;
+import org.superbiz.moviefun.moviesapi.AlbumsClient;
+import org.superbiz.moviefun.moviesapi.MovieServlet;
+import org.superbiz.moviefun.moviesapi.MoviesClient;
 
 @SpringBootApplication
 public class Application {
@@ -18,6 +22,7 @@ public class Application {
     public static void main(String... args) {
         SpringApplication.run(Application.class, args);
     }
+
 
     @Bean
     public ServletRegistrationBean actionServletRegistration(MovieServlet movieServlet) {
@@ -47,4 +52,31 @@ public class Application {
 
         return new S3Store(s3Client, photoStorageBucket);
     }
+
+    @Configuration
+    public class ClientConfiguration {
+
+        @Value("${movies.url}") String moviesUrl;
+        @Value("${albums.url}") String albumsUrl;
+
+
+        @Bean
+        public RestTemplate RestTemplate() {
+            return new RestTemplate();
+        }
+
+        @Bean
+        public MoviesClient moviesClient(RestTemplate restTemplate) {
+            return new MoviesClient(restTemplate, moviesUrl);
+        }
+
+        @Bean
+        public AlbumsClient albumsClient(RestTemplate restTemplate) {
+            return new AlbumsClient(restTemplate, albumsUrl);
+        }
+
+    }
+
+
+
 }
